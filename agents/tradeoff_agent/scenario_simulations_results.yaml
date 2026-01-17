@@ -1,0 +1,232 @@
+scenario_simulation:
+  metadata:
+    method: "LLM-simulated architectural reasoning"
+    note: "Mocked ATAM-style scenario evaluation based on provided architectures and scenarios"
+    scale:
+      effort: [low, medium, high]
+      risk: [low, medium, high]
+      confidence: [low, medium, high]
+  evaluations:
+    ARCH-02:
+      architecture_name: "Modular Monolith with Integration Layer"
+      SC-performance-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: high
+        rationale:
+          - "Single deployment unit limits horizontal scalability"
+          - "In-process calls reduce latency under moderate load"
+          - "CacheLayer mitigates database pressure"
+      SC-performance-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Centralized data access increases contention during updates"
+          - "Synchronous JDBC calls limit throughput under write-heavy load"
+      SC-scalability-1:
+        response:
+          effort: high
+          risk: high
+          confidence: medium
+        rationale:
+          - "Scaling requires replicating the entire monolith"
+          - "Shared database becomes a bottleneck under concurrency"
+      SC-availability-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: high
+        rationale:
+          - "IntegrationLayer isolates some external failures"
+          - "Single failure domain limits partial degradation"
+      SC-availability-2:
+        response:
+          effort: high
+          risk: high
+          confidence: high
+        rationale:
+          - "On-prem deployment vulnerable to infrastructure outages"
+          - "Recovery requires full system restart"
+      SC-security-1:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "Centralized authentication simplifies access control"
+          - "Single security boundary reduces attack surface"
+      SC-security-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Session management centralized but tightly coupled"
+          - "Token revocation impacts entire system"
+      SC-observability-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Limited visibility into internal queues"
+          - "Requires manual instrumentation across layers"
+      SC-observability-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Fallback logic implemented in IntegrationLayer"
+          - "Limited real-time insight into external failures"
+    ARCH-03:
+      architecture_name: "Microservices Split"
+      SC-performance-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Network latency between services increases response time"
+          - "Independent scaling of OrderService mitigates load"
+      SC-performance-2:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "CatalogService isolated from order processing"
+          - "Cache reduces read pressure during updates"
+      SC-scalability-1:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "Services can scale independently"
+          - "Horizontal scaling supported by deployment model"
+      SC-availability-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Synchronous REST dependencies propagate failures"
+          - "Partial degradation possible with service isolation"
+      SC-availability-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Failure limited to affected services"
+          - "Recovery depends on orchestration support"
+      SC-security-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: high
+        rationale:
+          - "Multiple service endpoints increase attack surface"
+          - "Fine-grained authorization possible per service"
+      SC-security-2:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "Token revocation localized to affected services"
+          - "Clear API boundaries support rapid mitigation"
+      SC-observability-1:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Distributed tracing required to observe queues"
+          - "Metrics fragmented across services"
+      SC-observability-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Fallback logic must be coordinated across services"
+          - "Detection relies on inter-service monitoring"
+    ARCH-04:
+      architecture_name: "Event-Driven Microservices"
+      SC-performance-1:
+        response:
+          effort: medium
+          risk: low
+          confidence: medium
+        rationale:
+          - "Asynchronous processing absorbs traffic spikes"
+          - "Eventual consistency delays end-to-end completion"
+      SC-performance-2:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "Event-driven updates decouple write operations"
+          - "Consumers process changes independently"
+      SC-scalability-1:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "EventBus supports elastic scaling of consumers"
+          - "Load distributed across services asynchronously"
+      SC-availability-1:
+        response:
+          effort: low
+          risk: low
+          confidence: high
+        rationale:
+          - "Asynchronous communication prevents cascading failures"
+          - "Services tolerate temporary unavailability"
+      SC-availability-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Event replay supports recovery after downtime"
+          - "EventBus availability is critical"
+      SC-security-1:
+        response:
+          effort: medium
+          risk: low
+          confidence: medium
+        rationale:
+          - "Event-based access requires strong validation"
+          - "Decentralized security controls increase complexity"
+      SC-security-2:
+        response:
+          effort: medium
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Revoking distributed tokens requires coordination"
+          - "Eventual consistency delays full mitigation"
+      SC-observability-1:
+        response:
+          effort: high
+          risk: medium
+          confidence: medium
+        rationale:
+          - "Asynchronous flows harder to trace"
+          - "Queue buildup requires advanced monitoring"
+      SC-observability-2:
+        response:
+          effort: medium
+          risk: low
+          confidence: high
+        rationale:
+          - "Event-driven fallback enables graceful degradation"
+          - "Failures detected through event stream analysis"
