@@ -1,1 +1,2 @@
-Questa cartella contiene la kb usata dall'agente divisa in chunk e indicizzata, per ogni step che usa una richiesta ad LLM è prevista una cartella contenente i relativi chunk
+Questa cartella contiene la kb usata dall'agente divisa in chunk e indicizzata, per ogni step che usa una richiesta ad LLM è prevista una cartella contenente i relativi chunk.
+Per popolare appropriatamente queste cartelle bisogna inserire nella cartella data (nella relativa cartella dello step) i documenti in formato pdf su cui si vuole effettuare la RAG, dopo di che si deve eseguire lo script python ingest.py presente nella cartella rag.
