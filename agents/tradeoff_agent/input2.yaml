@@ -1,0 +1,573 @@
+# ============================================================
+# Architecture Evaluation Input
+# Standard: ISO/IEC/IEEE 42010:2011
+# Modeling Language: UML 2.x (Component & Deployment Views)
+# Purpose: Input normalization for ATAM-inspired analysis
+# ============================================================
+
+context:
+  system_name: "Order Management System"
+  domain: "E-commerce"
+  description: "Sistema backend per gestione ordini, pagamenti e catalogo prodotti"
+
+stakeholders:
+  - role: ProductOwner
+    concerns: [time_to_market, feature_flexibility]
+  - role: Operations
+    concerns: [availability, operability, cost_control]
+  - role: DevelopmentTeam
+    concerns: [modifiability, testability]
+
+# ============================================================
+# Functional Requirements (Architecturally Relevant)
+# ============================================================
+functional_requirements:
+  - id: FR-01
+    description: "Gestione ordini (creazione, stato, cancellazione)"
+  - id: FR-02
+    description: "Integrazione con sistemi di pagamento esterni"
+  - id: FR-03
+    description: "Consultazione catalogo prodotti"
+  - id: FR-04
+    description: "Gestione utenti e autenticazione"
+
+# ============================================================
+# Non-Functional Requirements (ISO/IEC 25010)
+# ============================================================
+non_functional_requirements:
+
+  performance:
+    id: NFR-01
+    latency:
+      api_p95: "<250ms"
+      api_p99: "<500ms"
+      scope: "read and write operations"
+      priority: high
+    throughput:
+      target: ">= 1.500 req/sec"
+      peak_window: "daily sales campaigns"
+      priority: high
+
+  scalability:
+    id: NFR-02
+    strategy: horizontal
+    expected_growth:
+      users: "8-12x within 18 months"
+      orders: "15x during seasonal peaks"
+    elasticity:
+      auto_scaling: required
+    priority: high
+
+  availability:
+    id: NFR-03
+    sla:
+      uptime: "99.95%"
+      measurement_window: "monthly"
+    planned_downtime:
+      max_per_month: "30 minutes"
+    disaster_recovery:
+      rpo: "15 minutes"
+      rto: "1 hour"
+    priority: high
+
+  reliability:
+    id: NFR-04
+    error_rate:
+      api_5xx: "<0.1%"
+    fault_tolerance:
+      partial_failures: tolerated
+      retry_policy: required
+    priority: medium
+
+  security:
+    id: NFR-05
+    authentication:
+      mechanisms:
+        - OAuth2
+        - OpenID Connect
+    authorization:
+      model: role_based
+    data_protection:
+      encryption_at_rest: AES-256
+      encryption_in_transit: TLS 1.2+
+    compliance:
+      - GDPR
+    priority: high
+
+  modifiability:
+    id: NFR-06
+    expected_change_frequency:
+      business_rules: weekly
+      integrations: monthly
+    deployment_independence: required
+    priority: medium
+
+  maintainability:
+    id: NFR-07
+    code_quality:
+      cyclomatic_complexity_max: 15
+    technical_debt:
+      acceptable_level: low
+    priority: medium
+
+  testability:
+    id: NFR-08
+    automated_testing:
+      unit_test_coverage: ">=80%"
+      integration_tests: required
+    environment_parity:
+      test_vs_prod: high
+    priority: medium
+
+  observability:
+    id: NFR-09
+    logging:
+      structured: required
+      retention: "30 days"
+    monitoring:
+      metrics:
+        - latency
+        - error_rate
+        - resource_utilization
+    alerting:
+      sla_breach: immediate
+    priority: high
+
+  interoperability:
+    id: NFR-10
+    external_systems:
+      payment_gateways: multiple
+      shipping_providers: multiple
+    api_standards:
+      - REST
+      - OpenAPI 3.0
+    backward_compatibility: required
+    priority: medium
+
+  portability:
+    id: NFR-11
+    deployment_targets:
+      - public_cloud
+      - private_cloud
+    containerization: required
+    priority: low
+
+  cost_efficiency:
+    id: NFR-12
+    cloud_budget:
+      monthly_limit: "12.000 euro"
+    cost_visibility:
+      per_service: required
+    priority: medium
+
+# ============================================================
+# Constraints
+# ============================================================
+constraints:
+  organizational:
+    team_size: 6
+    architecture_experience: medium
+  technical:
+    preferred_tech_stack:
+      - Java
+      - Spring Boot
+      - PostgreSQL
+  economic:
+    cloud_budget: medium
+  schedule:
+    initial_release: "3 months"
+
+architectures:
+  - architecture_id: ARCH-02
+    name: Modular Monolith with Integration Layer
+    style:
+      - Monolithic
+      - Layered
+    uml_standard: OMG UML 2.5.1
+    views:
+      component_view:
+        components:
+          - id: WebUI
+            type: component
+            responsibilities:
+              - User interaction
+            interfaces:
+              provided:
+                - name: WebPages
+                  protocol: HTTP
+              required:
+                - name: ApplicationAPI
+          - id: ApplicationLayer
+            type: component
+            responsibilities:
+              - Business logic
+            interfaces:
+              provided:
+                - name: ApplicationAPI
+                  protocol: InProcess
+              required:
+                - name: PersistenceAPI
+                - name: IntegrationAPI
+          - id: DataAccessLayer
+            type: component
+            responsibilities:
+              - Data persistence
+            interfaces:
+              provided:
+                - name: PersistenceAPI
+                  protocol: JDBC
+              required: []
+          - id: IntegrationLayer
+            type: component
+            responsibilities:
+              - External system integration
+            interfaces:
+              provided:
+                - name: IntegrationAPI
+                  protocol: REST
+              required:
+                - name: PaymentGatewayAPI
+                - name: ShippingAPI
+          - id: CacheLayer
+            type: component
+            responsibilities:
+              - Caching frequently accessed data
+            interfaces:
+              provided:
+                - name: CacheAPI
+                  protocol: InProcess
+              required:
+                - name: PersistenceAPI
+        connectors:
+          - from: WebUI
+            to: ApplicationLayer
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: InProcess
+              semantics: request-response
+          - from: ApplicationLayer
+            to: DataAccessLayer
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: JDBC
+              semantics: blocking call
+          - from: ApplicationLayer
+            to: IntegrationLayer
+            interaction:
+              style: asynchronous
+              connector_type: assembly
+              protocol: REST
+              semantics: request-response
+          - from: ApplicationLayer
+            to: CacheLayer
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: InProcess
+              semantics: read-write
+      deployment_view:
+        nodes:
+          - id: AppServer1
+            deployed_components:
+              - WebUI
+              - ApplicationLayer
+              - CacheLayer
+          - id: AppServer2
+            deployed_components:
+              - ApplicationLayer
+              - DataAccessLayer
+              - IntegrationLayer
+          - id: AppServer3
+            deployed_components:
+              - IntegrationLayer
+              - CacheLayer
+        communication_paths:
+          - source: AppServer1
+            target: AppServer2
+            type: rpc
+          - source: AppServer1
+            target: AppServer3
+            type: rpc
+          - source: AppServer2
+            target: AppServer3
+            type: rpc
+  - architecture_id: ARCH-03
+    name: Microservices Split
+    style:
+      - Microservices
+      - Layered
+    uml_standard: OMG UML 2.5.1
+    views:
+      component_view:
+        components:
+          - id: WebUI
+            type: component
+            responsibilities:
+              - User interaction
+            interfaces:
+              provided:
+                - name: WebPages
+                  protocol: HTTP
+              required:
+                - name: OrderServiceAPI
+                - name: CatalogServiceAPI
+
+          - id: OrderService
+            type: component
+            responsibilities:
+              - Order management
+            interfaces:
+              provided:
+                - name: OrderServiceAPI
+                  protocol: REST
+              required:
+                - name: PaymentServiceAPI
+                - name: InventoryServiceAPI
+
+          - id: CatalogService
+            type: component
+            responsibilities:
+              - Product catalog management
+            interfaces:
+              provided:
+                - name: CatalogServiceAPI
+                  protocol: REST
+              required:
+                - name: CacheAPI
+
+          - id: PaymentService
+            type: component
+            responsibilities:
+              - Payment processing
+            interfaces:
+              provided:
+                - name: PaymentServiceAPI
+                  protocol: REST
+              required: []
+
+          - id: InventoryService
+            type: component
+            responsibilities:
+              - Inventory management
+            interfaces:
+              provided:
+                - name: InventoryServiceAPI
+                  protocol: REST
+              required:
+                - name: DataAccessAPI
+
+          - id: Cache
+            type: component
+            responsibilities:
+              - Caching frequently accessed data
+            interfaces:
+              provided:
+                - name: CacheAPI
+                  protocol: InProcess
+              required:
+                - name: DataAccessAPI
+
+          - id: DataAccess
+            type: component
+            responsibilities:
+              - Persistent storage
+            interfaces:
+              provided:
+                - name: DataAccessAPI
+                  protocol: JDBC
+              required: []
+
+        connectors:
+          - from: WebUI
+            to: OrderService
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: REST
+              semantics: request-response
+          - from: WebUI
+            to: CatalogService
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: REST
+              semantics: request-response
+          - from: OrderService
+            to: PaymentService
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: REST
+              semantics: request-response
+          - from: OrderService
+            to: InventoryService
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: REST
+              semantics: request-response
+          - from: CatalogService
+            to: Cache
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: InProcess
+              semantics: read-write
+          - from: InventoryService
+            to: DataAccess
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: JDBC
+              semantics: blocking call
+
+      deployment_view:
+        nodes:
+          - id: MSAppServer1
+            deployed_components:
+              - WebUI
+              - CatalogService
+              - Cache
+          - id: MSAppServer2
+            deployed_components:
+              - OrderService
+              - InventoryService
+          - id: MSAppServer3
+            deployed_components:
+              - PaymentService
+              - DataAccess
+        communication_paths:
+          - source: MSAppServer1
+            target: MSAppServer2
+            type: rpc
+          - source: MSAppServer2
+            target: MSAppServer3
+            type: rpc
+  - architecture_id: ARCH-04
+    name: Event-Driven Microservices
+    style:
+      - Microservices
+      - Event-Driven
+    uml_standard: OMG UML 2.5.1
+    views:
+      component_view:
+        components:
+          - id: WebUI
+            type: component
+            responsibilities:
+              - User interaction
+            interfaces:
+              provided:
+                - name: WebPages
+                  protocol: HTTP
+              required:
+                - name: OrderProducerAPI
+                - name: CatalogConsumerAPI
+          - id: OrderService
+            type: component
+            responsibilities:
+              - Order management
+            interfaces:
+              provided:
+                - name: OrderProducerAPI
+                  protocol: Async
+              required:
+                - name: PaymentServiceAPI
+          - id: CatalogService
+            type: component
+            responsibilities:
+              - Product catalog management
+            interfaces:
+              provided:
+                - name: CatalogConsumerAPI
+                  protocol: Async
+              required:
+                - name: DataAccessAPI
+          - id: PaymentService
+            type: component
+            responsibilities:
+              - Payment processing
+            interfaces:
+              provided:
+                - name: PaymentServiceAPI
+                  protocol: Async
+              required: []
+          - id: EventBus
+            type: component
+            responsibilities:
+              - Event routing between services
+            interfaces:
+              provided:
+                - name: EventBusAPI
+                  protocol: Async
+              required: []
+          - id: DataAccess
+            type: component
+            responsibilities:
+              - Persistent storage
+            interfaces:
+              provided:
+                - name: DataAccessAPI
+                  protocol: JDBC
+              required: []
+        connectors:
+          - from: WebUI
+            to: OrderService
+            interaction:
+              style: asynchronous
+              connector_type: assembly
+              protocol: Async
+              semantics: fire-and-forget
+          - from: OrderService
+            to: PaymentService
+            interaction:
+              style: asynchronous
+              connector_type: assembly
+              protocol: Async
+              semantics: event-driven
+          - from: OrderService
+            to: EventBus
+            interaction:
+              style: asynchronous
+              connector_type: assembly
+              protocol: Async
+              semantics: publish
+          - from: CatalogService
+            to: EventBus
+            interaction:
+              style: asynchronous
+              connector_type: assembly
+              protocol: Async
+              semantics: subscribe
+          - from: CatalogService
+            to: DataAccess
+            interaction:
+              style: synchronous
+              connector_type: assembly
+              protocol: JDBC
+              semantics: blocking call
+      deployment_view:
+        nodes:
+        - id: MSAppServer1
+          deployed_components:
+            - WebUI
+            - CatalogService
+        - id: MSAppServer2
+          deployed_components:
+            - OrderService
+            - PaymentService
+        - id: MSAppServer3
+          deployed_components:
+            - EventBus
+            - DataAccess
+      communication_paths:
+        - source: MSAppServer1
+          target: MSAppServer2
+          type: async
+        - source: MSAppServer2
+          target: MSAppServer3
+          type: async
+
+
