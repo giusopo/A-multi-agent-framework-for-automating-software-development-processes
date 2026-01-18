@@ -1,0 +1,98 @@
+Requirements Analysis Document (RAD) – ShopNow E-Commerce Platform
+
+Version: 1.0
+Date: 2025-12-24
+Author: Test Architect
+
+----------------------------------------
+1. Introduction
+----------------------------------------
+The ShopNow E-Commerce Platform is intended to provide an online marketplace for users to browse, purchase, and manage products. The system must support high availability, scalability, and security, while providing a responsive user experience.
+
+----------------------------------------
+2. Stakeholders
+----------------------------------------
+- End Users: customers who browse and purchase products
+- Administrators: system administrators who manage the platform
+- Payment Providers: external services for processing payments
+- Shipping Providers: external logistics services
+- Business Owners: ShopNow S.r.l.
+
+----------------------------------------
+3. Functional Requirements (RF)
+----------------------------------------
+RF-01: Product Catalog Management
+The system must allow users to browse a product catalog, including categories, descriptions, images, prices, and stock availability.
+
+RF-02: Shopping Cart Management
+Users must be able to add, remove, and modify products in the shopping cart, both authenticated and guest users.
+
+RF-03: Order Processing
+The system must enable users to place orders, select payment and shipping methods, and receive an order confirmation.
+
+RF-04: Payment Integration
+The platform must integrate with external payment providers, including credit cards, PayPal, and Apple Pay.
+
+RF-05: User Account Management
+Users must be able to register, authenticate, and manage their profile and order history.
+
+RF-06: Notifications
+The system must send email notifications for order confirmations, shipping updates, and cancellations.
+
+RF-07: Administrative Dashboard
+Administrators must manage products, pricing, orders, users, and view sales statistics.
+
+RF-08: Password Reset
+Users shall be able to reset their password via email by requesting a password reset link.
+
+RF-09: Product Reviews
+Users shall be able to submit and view reviews and ratings for purchased products.
+
+RF-10: Language Selection
+Users shall be able to select the preferred language for the user interface from a predefined list.
+
+----------------------------------------
+4. Non-Functional Requirements (RNF / Quality Attributes)
+----------------------------------------
+RNF-01: Performance
+The system shall respond to user interactions within 2 seconds for catalog browsing, cart updates, and checkout operations under normal load conditions.
+
+RNF-02: Scalability
+The system must support at least 50,000 concurrent users with the ability to scale horizontally during peak events like promotions.
+
+RNF-03: Availability
+The platform shall maintain 99.9% uptime, with minimal downtime during maintenance or failures.
+
+RNF-04: Reliability
+Orders must not be lost in case of temporary network or system failures.
+
+RNF-05: Security
+User data, including payment information, must be encrypted in transit and at rest, complying with GDPR.
+
+RNF-06: Maintainability
+The system shall allow the introduction of new features or payment methods with minimal disruption to ongoing operations.
+
+RNF-07: Usability
+The user interface must be intuitive, responsive, and accessible according to WCAG 2.1 AA guidelines.
+
+----------------------------------------
+5. Constraints
+----------------------------------------
+C-01: Technology Stack
+The system must be developed using open-source technologies (e.g., Java, Spring Boot, React).
+
+C-02: Deployment
+The platform must be deployed on cloud infrastructure (AWS or Azure).
+
+C-03: Regulatory Compliance
+The system must comply with GDPR and PCI-DSS standards for handling personal and payment data.
+
+C-04: Team Skills
+The development team primarily has experience in Java and cloud-native architectures.
+
+----------------------------------------
+6. Assumptions
+----------------------------------------
+A-01: Users have access to modern web browsers.
+A-02: Payment and shipping providers expose stable APIs.
+A-03: Internet connectivity is reliable for the majority of users.

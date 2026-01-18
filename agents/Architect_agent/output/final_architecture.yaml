@@ -1,0 +1,760 @@
+architectures:
+- architecture_id: SPACE-BA
+  name: Space-Based Architecture
+  style:
+  - Space-Based Architecture
+  supported_quality_attributes:
+  - Scalability
+  - Availability
+  - Performance
+  - Elasticity
+  main_risks:
+  - Complexity of implementation
+  - Cost of implementation
+  - Data consistency challenges
+  rationale: ''
+  uml_standard: OMG UML 2.5.1
+  views:
+    component_view:
+      components:
+      - id: Catalog Service
+        type: component
+        responsibilities:
+        - Managing product catalog data
+        - Providing catalog browsing functionality
+        - Handling catalog updates
+        interfaces:
+          provided:
+          - name: Catalog API
+            protocol: Space Read/Write
+          required: []
+      - id: Cart Service
+        type: component
+        responsibilities:
+        - Managing user shopping carts
+        - Handling cart updates (add, remove, modify items)
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart API
+            protocol: Space Read/Write
+          required: []
+      - id: Order Service
+        type: component
+        responsibilities:
+        - Processing customer orders
+        - Managing order status
+        - Integrating with payment and shipping providers
+        interfaces:
+          provided:
+          - name: Order API
+            protocol: Space Read/Write
+          required: []
+      - id: User Authentication Service
+        type: component
+        responsibilities:
+        - User registration and login
+        - Authentication and authorization
+        - Managing user profiles
+        interfaces:
+          provided:
+          - name: Authentication API
+            protocol: Space Read/Write
+          required: []
+      - id: Payment Service
+        type: component
+        responsibilities:
+        - Processing payments
+        - Integrating with payment gateways
+        - Handling payment confirmations and refunds
+        interfaces:
+          provided:
+          - name: Payment API
+            protocol: Space Read/Write
+          required: []
+      - id: Shipping Service
+        type: component
+        responsibilities:
+        - Calculating shipping costs
+        - Integrating with shipping providers
+        - Tracking shipments
+        interfaces:
+          provided:
+          - name: Shipping API
+            protocol: Space Read/Write
+          required: []
+      - id: UI Component
+        type: component
+        responsibilities:
+        - Presenting information to the user
+        - Collecting user input
+        - Interacting with other services via APIs
+        interfaces:
+          provided:
+          - name: UI API
+            protocol: Space Read/Write
+          required: []
+      connectors:
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: null
+        to: null
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+    deployment_view:
+      nodes:
+      - Web Server
+      - Application Server
+      - Database Server
+      - Payment Gateway Server
+      - Shipping Provider Server
+      communication_paths: []
+    context_view:
+      actors:
+      - End Users
+      - Administrators
+      - Payment Providers
+      - Shipping Providers
+      external_systems:
+      - Payment Gateways
+      - Shipping Providers
+    logical_view:
+      components:
+      - id: Catalog Service
+        responsibilities:
+        - Managing product catalog data
+        - Providing catalog browsing functionality
+        - Handling catalog updates
+        interfaces:
+          provided:
+          - name: Catalog API
+            protocol: Space Read/Write
+          required: []
+      - id: Cart Service
+        responsibilities:
+        - Managing user shopping carts
+        - Handling cart updates (add, remove, modify items)
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart API
+            protocol: Space Read/Write
+          required: []
+      - id: Order Service
+        responsibilities:
+        - Processing customer orders
+        - Managing order status
+        - Integrating with payment and shipping providers
+        interfaces:
+          provided:
+          - name: Order API
+            protocol: Space Read/Write
+          required: []
+      - id: User Authentication Service
+        responsibilities:
+        - User registration and login
+        - Authentication and authorization
+        - Managing user profiles
+        interfaces:
+          provided:
+          - name: Authentication API
+            protocol: Space Read/Write
+          required: []
+      - id: Payment Service
+        responsibilities:
+        - Processing payments
+        - Integrating with payment gateways
+        - Handling payment confirmations and refunds
+        interfaces:
+          provided:
+          - name: Payment API
+            protocol: Space Read/Write
+          required: []
+      - id: Shipping Service
+        responsibilities:
+        - Calculating shipping costs
+        - Integrating with shipping providers
+        - Tracking shipments
+        interfaces:
+          provided:
+          - name: Shipping API
+            protocol: Space Read/Write
+          required: []
+      - id: UI Component
+        responsibilities:
+        - Presenting information to the user
+        - Collecting user input
+        - Interacting with other services via APIs
+        interfaces:
+          provided:
+          - name: UI API
+            protocol: Space Read/Write
+          required: []
+      connectors:
+      - name: Catalog Service - Cart Service
+        type: Space Read/Write
+      - name: Cart Service - Order Service
+        type: Space Read/Write
+      - name: Order Service - Payment Service
+        type: Space Read/Write
+      - name: Order Service - Shipping Service
+        type: Space Read/Write
+      - name: UI Component - Catalog Service
+        type: Space Read/Write
+      - name: UI Component - Cart Service
+        type: Space Read/Write
+      - name: UI Component - Order Service
+        type: Space Read/Write
+      - name: UI Component - User Authentication Service
+        type: Space Read/Write
+    runtime_view:
+      scenarios:
+      - name: Catalog Browsing
+        description: User browses the product catalog through the UI component, interacting
+          with the Catalog Service via the Catalog API.
+      - name: Adding to Cart
+        description: User adds an item to their cart through the UI component, which
+          interacts with the Cart Service via the Cart API.
+      - name: Checkout Process
+        description: User proceeds to checkout through the UI component. The UI component
+          interacts with the Cart Service and Order Service via their respective APIs.
+          The Order Service then interacts with the Payment Service and Shipping Service
+          as needed.
+    security_view:
+      trust_boundaries:
+      - Web Server <-> UI Component
+      - UI Component <-> Application Server
+      - Application Server <-> Database Server
+      - Application Server <-> Payment Gateway Server
+      - Application Server <-> Shipping Provider Server
+      threats:
+      - Unauthorized access to user data
+      - Payment fraud
+      - Data breaches
+      - Denial of service attacks
+      countermeasures:
+      - Encryption of data in transit and at rest
+      - Secure authentication and authorization mechanisms
+      - Regular security audits
+      - Firewalls and intrusion detection systems
+- architecture_id: MICROSER
+  name: Microservices Architecture
+  style:
+  - Microservices Architecture
+  supported_quality_attributes:
+  - Scalability
+  - Availability
+  - Maintainability
+  - Flexibility
+  main_risks:
+  - Complexity of distributed systems
+  - Inter-service communication overhead
+  - Data consistency across services
+  rationale: ''
+  uml_standard: OMG UML 2.5.1
+  views:
+    component_view:
+      components:
+      - id: Catalog Service
+        type: component
+        responsibilities:
+        - Managing product catalog data
+        - Providing catalog browsing functionality
+        - Handling product search requests
+        interfaces:
+          provided:
+          - name: Catalog API
+            protocol: REST
+          required:
+          - name: Database Interface
+            protocol: Database Access
+      - id: Cart Service
+        type: component
+        responsibilities:
+        - Managing user shopping carts
+        - Handling cart updates (add, remove, update quantities)
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart API
+            protocol: REST
+          required:
+          - name: Database Interface
+            protocol: Database Access
+          - name: Catalog Service
+            protocol: REST
+      - id: Order Service
+        type: component
+        responsibilities:
+        - Managing order creation and processing
+        - Handling payment processing
+        - Managing order status updates
+        interfaces:
+          provided:
+          - name: Order API
+            protocol: REST
+          required:
+          - name: Cart Service
+            protocol: REST
+          - name: Payment Gateway
+            protocol: REST
+          - name: Shipping Service
+            protocol: REST
+      - id: User Service
+        type: component
+        responsibilities:
+        - Managing user accounts and authentication
+        - Handling user profile information
+        interfaces:
+          provided:
+          - name: User API
+            protocol: REST
+          required:
+          - name: Authentication Service
+            protocol: REST
+      - id: Payment Service
+        type: component
+        responsibilities:
+        - Processing payments through various gateways
+        - Handling payment authorization and capture
+        interfaces:
+          provided:
+          - name: Payment API
+            protocol: REST
+          required:
+          - name: Payment Gateway Adapters
+            protocol: REST
+      - id: Shipping Service
+        type: component
+        responsibilities:
+        - Calculating shipping costs
+        - Managing shipping providers
+        - Tracking shipments
+        interfaces:
+          provided:
+          - name: Shipping API
+            protocol: REST
+          required:
+          - name: Shipping Provider Adapters
+            protocol: REST
+      connectors:
+      - from: Catalog Service
+        to: User Service
+        interaction:
+          style: synchronous
+          connector_type: space read/write
+          protocol: HTTP
+          semantics: request-response
+      - from: Cart Service
+        to: User Service
+        interaction:
+          style: synchronous
+          connector_type: space read/write
+          protocol: HTTP
+          semantics: request-response
+      - from: Order Service
+        to: Payment Service
+        interaction:
+          style: synchronous
+          connector_type: space read/write
+          protocol: HTTP
+          semantics: request-response
+      - from: Order Service
+        to: Shipping Service
+        interaction:
+          style: synchronous
+          connector_type: space read/write
+          protocol: HTTP
+          semantics: request-response
+    deployment_view:
+      nodes:
+      - Web Server
+      - Application Server
+      - Database Server
+      - Message Queue Server
+      communication_paths: []
+    context_view:
+      actors:
+      - End Users
+      - Payment Providers
+      - Shipping Providers
+      external_systems: []
+    logical_view:
+      components:
+      - id: Catalog Service
+        responsibilities:
+        - Managing product catalog data
+        - Providing catalog browsing functionality
+        - Handling product search requests
+        interfaces:
+          provided:
+          - name: Catalog API
+            protocol: REST
+          required:
+          - name: Database Interface
+            protocol: Database Access
+      - id: Cart Service
+        responsibilities:
+        - Managing user shopping carts
+        - Handling cart updates (add, remove, update quantities)
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart API
+            protocol: REST
+          required:
+          - name: Database Interface
+            protocol: Database Access
+          - name: Catalog Service
+            protocol: REST
+      - id: Order Service
+        responsibilities:
+        - Managing order creation and processing
+        - Handling payment processing
+        - Managing order status updates
+        interfaces:
+          provided:
+          - name: Order API
+            protocol: REST
+          required:
+          - name: Cart Service
+            protocol: REST
+          - name: Payment Gateway
+            protocol: REST
+          - name: Shipping Service
+            protocol: REST
+      - id: User Service
+        responsibilities:
+        - Managing user accounts and authentication
+        - Handling user profile information
+        interfaces:
+          provided:
+          - name: User API
+            protocol: REST
+          required:
+          - name: Authentication Service
+            protocol: REST
+      - id: Payment Service
+        responsibilities:
+        - Processing payments through various gateways
+        - Handling payment authorization and capture
+        interfaces:
+          provided:
+          - name: Payment API
+            protocol: REST
+          required:
+          - name: Payment Gateway Adapters
+            protocol: REST
+      - id: Shipping Service
+        responsibilities:
+        - Calculating shipping costs
+        - Managing shipping providers
+        - Tracking shipments
+        interfaces:
+          provided:
+          - name: Shipping API
+            protocol: REST
+          required:
+          - name: Shipping Provider Adapters
+            protocol: REST
+      connectors:
+      - source: Catalog Service
+        target: User Service
+        type: space read/write
+      - source: Cart Service
+        target: User Service
+        type: space read/write
+      - source: Order Service
+        target: Payment Service
+        type: space read/write
+      - source: Order Service
+        target: Shipping Service
+        type: space read/write
+    runtime_view:
+      scenarios:
+      - name: Catalog Browsing
+        description: User browses products through the Catalog Service.
+      - name: Adding to Cart
+        description: User adds a product to their cart via the Cart Service.
+      - name: Checkout Process
+        description: User proceeds to checkout, involving Cart Service, Order Service,
+          Payment Service, and Shipping Service.
+    security_view:
+      trust_boundaries:
+      - User to Web Server
+      - Web Server to Application Server
+      - Application Server to Database Server
+      - Application Server to External Payment Gateway
+      - Application Server to External Shipping Provider
+      threats:
+      - Unauthorized access to user data
+      - Payment fraud
+      - Data breaches
+      - Denial of service attacks
+      countermeasures:
+      - Authentication and authorization mechanisms
+      - Encryption of sensitive data in transit and at rest
+      - Regular security audits
+      - Firewalls and intrusion detection systems
+- architecture_id: CLIENT-S
+  name: Client-Server Architecture
+  style:
+  - Client-Server Architecture
+  supported_quality_attributes:
+  - Scalability
+  - Availability
+  - Ease of understanding
+  - Maintainability
+  main_risks:
+  - Single point of failure (server)
+  - Potential for server overload
+  - Network dependency
+  rationale: ''
+  uml_standard: OMG UML 2.5.1
+  views:
+    component_view:
+      components:
+      - id: Catalog Browser
+        type: component
+        responsibilities:
+        - Displaying catalog items
+        - Handling user interactions for browsing
+        interfaces:
+          provided:
+          - name: Catalog Display Interface
+            protocol: Space Read/Write
+          - name: User Interaction Interface
+            protocol: Space Read/Write
+          required: []
+      - id: Cart Manager
+        type: component
+        responsibilities:
+        - Managing user shopping carts
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart Management Interface
+            protocol: Space Read/Write
+          - name: Order Placement Interface
+            protocol: Space Read/Write
+          required: []
+      - id: Order Processor
+        type: component
+        responsibilities:
+        - Processing customer orders
+        - Communicating with payment and shipping providers
+        interfaces:
+          provided:
+          - name: Order Processing Interface
+            protocol: Space Read/Write
+          - name: Payment Provider Interface
+            protocol: Space Read/Write
+          - name: Shipping Provider Interface
+            protocol: Space Read/Write
+          required: []
+      - id: User Interface
+        type: component
+        responsibilities:
+        - Presenting the system to the user
+        - Handling user input
+        interfaces:
+          provided:
+          - name: UI Interface
+            protocol: Space Read/Write
+          required: []
+      connectors:
+      - from: User Interface
+        to: Catalog Browser
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: User Interface
+        to: Cart Manager
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: Cart Manager
+        to: Order Processor
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: Order Processor
+        to: Payment Provider
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+      - from: Order Processor
+        to: Shipping Provider
+        interaction:
+          style: synchronous
+          connector_type: Space Read/Write
+          protocol: HTTP
+          semantics: request-response
+    deployment_view:
+      nodes:
+      - name: Web Server
+        components:
+        - Catalog Browser
+        - Cart Manager
+        - Order Processor
+        - User Interface
+      - name: Database Server
+        components:
+        - Cart Manager
+        - Order Processor
+      - name: Payment Gateway
+        components:
+        - Order Processor
+      - name: Shipping Service
+        components:
+        - Order Processor
+      communication_paths: []
+    context_view:
+      actors:
+      - End Users
+      - Payment Providers
+      - Shipping Providers
+      external_systems: []
+    logical_view:
+      components:
+      - id: Catalog Browser
+        responsibilities:
+        - Displaying catalog items
+        - Handling user interactions for browsing
+        interfaces:
+          provided:
+          - name: Catalog Display Interface
+            protocol: Space Read/Write
+          - name: User Interaction Interface
+            protocol: Space Read/Write
+          required: []
+      - id: Cart Manager
+        responsibilities:
+        - Managing user shopping carts
+        - Calculating cart totals
+        interfaces:
+          provided:
+          - name: Cart Management Interface
+            protocol: Space Read/Write
+          - name: Order Placement Interface
+            protocol: Space Read/Write
+          required: []
+      - id: Order Processor
+        responsibilities:
+        - Processing customer orders
+        - Communicating with payment and shipping providers
+        interfaces:
+          provided:
+          - name: Order Processing Interface
+            protocol: Space Read/Write
+          - name: Payment Provider Interface
+            protocol: Space Read/Write
+          - name: Shipping Provider Interface
+            protocol: Space Read/Write
+          required: []
+      - id: User Interface
+        responsibilities:
+        - Presenting the system to the user
+        - Handling user input
+        interfaces:
+          provided:
+          - name: UI Interface
+            protocol: Space Read/Write
+          required: []
+      connectors:
+      - source: User Interface
+        target: Catalog Browser
+        type: Space Read/Write
+      - source: User Interface
+        target: Cart Manager
+        type: Space Read/Write
+      - source: Cart Manager
+        target: Order Processor
+        type: Space Read/Write
+      - source: Order Processor
+        target: Payment Provider
+        type: Space Read/Write
+      - source: Order Processor
+        target: Shipping Provider
+        type: Space Read/Write
+    runtime_view:
+      scenarios:
+      - name: Catalog Browsing
+        description: User navigates the catalog, viewing product details.
+      - name: Adding to Cart
+        description: User adds items to their shopping cart.
+      - name: Checkout Process
+        description: User proceeds to checkout, providing payment and shipping information.
+    security_view:
+      trust_boundaries:
+      - User Interface < Web Server
+      - Web Server < Database Server
+      - Web Server < Payment Gateway
+      - Web Server < Shipping Service
+      threats:
+      - Unauthorized access to user data
+      - Payment information interception
+      - Data breaches
+      countermeasures:
+      - HTTPS encryption
+      - Access control mechanisms
+      - Data encryption at rest and in transit
+      - Regular security audits
