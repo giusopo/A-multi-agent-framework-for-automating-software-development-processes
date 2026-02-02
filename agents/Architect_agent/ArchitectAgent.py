@@ -136,18 +136,21 @@ Output format MUST be valid JSON, exactly like this example:
 
 [
   {{
+    "architecture_id": "Architecture 1",
     "name": "Architecture 1",
     "style": "...",
     "supported_quality_attributes": ["...", "..."],
     "main_risks": ["...", "..."]
   }},
   {{
+    "architecture_id": "Architecture 2",
     "name": "Architecture 2",
     "style": "...",
     "supported_quality_attributes": ["...", "..."],
     "main_risks": ["...", "..."]
   }},
   {{
+    "architecture_id": "Architecture 3",
     "name": "Architecture 3",
     "style": "...",
     "supported_quality_attributes": ["...", "..."],
@@ -188,6 +191,10 @@ IMPORTANT:
 - This is the ONLY step where logical components are introduced.
 - All subsequent views MUST reuse these components without renaming or adding new ones.
 - Define logical connectors between components (e.g., space read/write, event publish..)
+IMPORTANT:
+- architecture_id MUST be exactly: {architecture_id}
+- name MUST be exactly: {architecture_name}
+
 
 OUTPUT REQUIREMENTS:
 - Output MUST be valid JSON
@@ -598,6 +605,8 @@ class ArchitectAgent:
             prompt = STEP3_PROMPT_TEMPLATE.format(
                 drivers=json.dumps(drivers, indent=2),
                 context_qta=context_qta,
+                architecture_id=arch["architecture_id"],
+                architecture_name=arch["name"],
                 architecture=arch_text,
                 context_arch=context_arch,
                 context_general=context_general
@@ -628,6 +637,7 @@ class ArchitectAgent:
             decompositions.append(parsed)
 
         self.memory["component_decompositions"] = decompositions
+        
         return decompositions
 
     # ==================================================
@@ -652,7 +662,7 @@ class ArchitectAgent:
             Deployment, and Security views.
             4+1 View Model by Kruchten, C4 Model by Simon Brown, ISO/IEC/IEEE 42010 Clause 5.
         """
-        context_text, _ = load_knowledge(self.embedding_function, database_step4, retrieval_query, k=20)
+        context_text, _ = load_knowledge(self.embedding_function, database_step4, retrieval_query, k=15)
 
         for arch in self.memory["candidate_architectures"]:
             component_decomposition = next(
@@ -918,33 +928,33 @@ class ArchitectAgent:
         # 2. Prepara prompt per il controllo qualità
         # ---------------------------------------------------------
         quality_check_prompt = f"""
-    You are a senior software architect applying ADD.
+        You are a senior software architect applying ADD.
 
-    TASK:
-    Review the provided architectural views for correctness, completeness, and adherence to ADD principles.
-    Use ONLY the CONTEXT (knowledge base) and the provided architectural drivers.
-    Do NOT modify the architecture, only check quality.
+        TASK:
+        Review the provided architectural views for correctness, completeness, and adherence to ADD principles.
+        Use ONLY the CONTEXT (knowledge base) and the provided architectural drivers.
+        Do NOT modify the architecture, only check quality.
 
-    ARCHITECTURAL DRIVERS:
-    {json.dumps({
-        "functional_drivers": self.memory["architectural_drivers"],
-        "quality_attribute_scenarios": self.memory["quality_attribute_scenarios"],
-        "constraints": self.memory["constraints"],
-        "stakeholders": self.memory["stakeholders"]
-    }, indent=2)}
+        ARCHITECTURAL DRIVERS:
+        {json.dumps({
+            "functional_drivers": self.memory["architectural_drivers"],
+            "quality_attribute_scenarios": self.memory["quality_attribute_scenarios"],
+            "constraints": self.memory["constraints"],
+            "stakeholders": self.memory["stakeholders"]
+        }, indent=2)}
 
-    ARCHITECTURAL VIEWS TO VALIDATE:
-    {json.dumps(views, indent=2)}
+        ARCHITECTURAL VIEWS TO VALIDATE:
+        {json.dumps(views, indent=2)}
 
-    CONTEXT (Guidelines from KB):
-    {context_text}
+        CONTEXT (Guidelines from KB):
+        {context_text}
 
-    OUTPUT:
-    - valid: "yes" or "no"
-    - issues: list of descriptions of problems (empty if valid)
+        OUTPUT:
+        - valid: "yes" or "no"
+        - issues: list of descriptions of problems (empty if valid)
 
-    Return ONLY valid JSON.
-        """
+        Return ONLY valid JSON.
+            """
 
         # ---------------------------------------------------------
         # 3. Invoca AutoGen
