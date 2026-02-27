@@ -1,0 +1,32 @@
+{
+    "view_to_diagram_mapping": {
+        "logical_view": "component_diagram",
+        "deployment_view": "deployment_diagram",
+        "runtime_view": "sequence_diagram",
+        "context_view": "context_diagram",
+        "security_view": "security_diagram"
+    },
+    "layout_rules": {
+        "max_components_per_view": 7,
+        "default_direction": "top-down"
+    },
+    "diagram_quality_rules": {
+        "sequence_diagram": {
+            "no_duplicate_participants": true,
+            "left_to_right_order": true,
+            "consistent_arrow_style": true,
+            "single_horizontal_alignment": true,
+            "separate_user_from_services": true
+        },
+        "component_diagram": {
+            "avoid_duplicate_components": true,
+            "consistent_connector_labels": true
+        }
+    },
+    "learned_rules": {
+        "require_user_actor": {
+            "diagram_type": "sequence_diagram",
+            "active": true
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "architecture_id": "Microservices Architecture",
+    "architecture_name": "Microservices Architecture",
+    "documented_views": [
+        "context_view",
+        "logical_view",
+        "deployment_view",
+        "runtime_view",
+        "security_view"
+    ],
+    "components": [
+        "Catalog Service",
+        "Cart Service",
+        "Order Service",
+        "User Service",
+        "Payment Service",
+        "Shipping Service"
+    ],
+    "relationships": [
+        {
+            "source": "Catalog Service",
+            "target": "User Service",
+            "type": "space read/write"
+        },
+        {
+            "source": "Cart Service",
+            "target": "User Service",
+            "type": "space read/write"
+        },
+        {
+            "source": "Order Service",
+            "target": "Payment Service",
+            "type": "space read/write"
+        },
+        {
+            "source": "Order Service",
+            "target": "Shipping Service",
+            "type": "space read/write"
+        }
+    ],
+    "generated_artifacts": [
+        "C:\\Users\\aless\\documenter-agent\\docs\\generated\\component_diagram.puml",
+        "C:\\Users\\aless\\documenter-agent\\docs\\generated\\deployment_diagram.puml"
+    ]
+}

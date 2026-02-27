@@ -1,0 +1,16 @@
+@startuml
+actor User
+rectangle "Web Server" as WebServer
+rectangle "Application Server" as AppServer
+database "Database Server" as DBServer
+
+User -> WebServer : HTTPS Request
+WebServer -> AppServer : Forward
+AppServer -> DBServer : Query
+AppServer -> WebServer : Response
+WebServer -> User : HTTPS Response
+
+note right of WebServer
+TLS Encryption
+end note
+@enduml

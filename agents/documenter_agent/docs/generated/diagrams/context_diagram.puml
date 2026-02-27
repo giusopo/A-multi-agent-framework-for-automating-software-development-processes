@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam rectangleStyle rounded
+skinparam shadowing false
+
+actor "User" as User
+rectangle "Payment Provider" as Payment
+rectangle "Shipping Provider" as Shipping
+
+rectangle "Microservices Architecture" as System #LightBlue
+
+User --> System : Uses platform
+System --> Payment : Processes payments
+System --> Shipping : Handles shipments
+@enduml
